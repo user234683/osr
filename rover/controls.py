@@ -164,9 +164,9 @@ class Rover():
 
 		for i in range(4):
 			index = int(math.ceil((i+1)/2.0)+2)
-                        if (i % 2):
+			if (i % 2):
 				self.rc.SpeedAccelDeccelPositionM2(self.address[index],accel,speed,accel,x[i],1)
-                        else:
+			else:
 				self.rc.SpeedAccelDeccelPositionM1(self.address[index],accel,speed,accel,x[i],1)
 
 
@@ -257,6 +257,7 @@ class Rover():
 				self.motorDuty(i+4,velocity[i])
 		else:
 			self.writeError()
+			raise Exception("Fatal: Motor controller(s) reported errors. See errorLog.txt.")
 
 	def killMotors(self):
 		'''

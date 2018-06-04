@@ -34,22 +34,21 @@ def listener():
 
 def main():
 	listener()
-	while True:
-		try:
+	try:
+		while True:
 			v,r = conn.getDriveVals()
 			rover.drive(v,r)
 
-		except Exception as e:
-			rover.killMotors()
-			conn.closeConnections()
-			time.sleep(0.5)
-			listener()
+			if args.socket:
+				try:
+					conn.sendUnixData()
+				except Exception:   # Don't use bare except clause, as that catches keyboard interrupts as well
+					pass
 
-		if args.socket:
-			try:
-				conn.sendUnixData()
-			except:
-				pass
+	except BaseException as e:  # Use BaseException, not Exception, as the latter will not catch keyboard interrupts
+		rover.killMotors()
+		conn.closeConnections()
+		raise
 
 if __name__ == '__main__':
 	main()
